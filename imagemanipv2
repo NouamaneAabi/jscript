@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery with Hover Interaction</title>
+    <style>
+        /* Gallery container */
+        .gallery {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Individual image style */
+        .gallery img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* Hover effect for images (scale and opacity change) */
+        .gallery img:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        /* Background container with image */
+        .background-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 30px;
+            background-color: #f0f0f0; /* Initial background color */
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gallery">
+        <img src="https://via.placeholder.com/200" alt="Image 1" data-bg="https://via.placeholder.com/600/ff0000" tabindex="0">
+        <img src="https://via.placeholder.com/200" alt="Image 2" data-bg="https://via.placeholder.com/600/00ff00" tabindex="1">
+        <img src="https://via.placeholder.com/200" alt="Image 3" data-bg="https://via.placeholder.com/600/0000ff" tabindex="2">
+        <img src="https://via.placeholder.com/200" alt="Image 4" data-bg="https://via.placeholder.com/600/ffff00" tabindex="3">
+    </div>
+
+    <!-- Background container that will change on hover -->
+    <div class="background-container" id="backgroundDiv"></div>
+
+    <script>
+        // Get all images in the gallery
+        const images = document.querySelectorAll('.gallery img');
+        const backgroundDiv = document.getElementById('backgroundDiv');
+
+        // Add event listeners for hover interaction (mouseenter and mouseleave)
+        images.forEach(img => {
+            img.addEventListener('mouseenter', () => {
+                img.style.transform = 'scale(1.1)';
+                img.style.opacity = '0.8';
+                const bgImage = img.getAttribute('data-bg'); // Get the background image URL from data attribute
+                backgroundDiv.style.backgroundImage = `url(${bgImage})`; // Change background image of the div
+                console.log(`Mouse entered: ${img.alt}`);
+            });
+
+            img.addEventListener('mouseleave', () => {
+                img.style.transform = 'scale(1)';
+                img.style.opacity = '1';
+                backgroundDiv.style.backgroundImage = 'none'; // Remove background image on hover off
+                console.log(`Mouse left: ${img.alt}`);
+            });
+
+            // Add onfocus and onblur event listeners for images
+            img.addEventListener('focus', () => {
+                img.style.border = '3px solid blue'; // Example: Add a border when focused
+                console.log(`Image focused: ${img.alt}`);
+            });
+
+            img.addEventListener('blur', () => {
+                img.style.border = ''; // Remove the border when focus is lost
+                console.log(`Image blurred: ${img.alt}`);
+            });
+        });
+
+        // Add onload event listener for the page load
+        window.addEventListener('load', () => {
+            console.log('Page fully loaded');
+            addTabFocusAttribute();
+        });
+
+        // Function to add tabindex attribute dynamically
+        function addTabFocusAttribute() {
+            // Add tabindex to all images for better accessibility
+            images.forEach((img, index) => {
+                img.setAttribute('tabindex', index);
+                console.log(`Added tabindex for image: ${img.alt}, tabindex: ${index}`);
+            });
+        }
+    </script>
+
+</body>
+</html>
